@@ -1,0 +1,11 @@
+build
+pod-build
+jsCore
+rgbdGrabber
+*~
+*.pyc
+*.csv
+tags
+*.swp
+*.swo
+*.lbl

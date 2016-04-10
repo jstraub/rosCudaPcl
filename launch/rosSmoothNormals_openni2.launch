@@ -1,0 +1,44 @@
+<launch>
+
+  <arg name="rosbag"      default="false"/>
+  <arg name="silent"      default="false"/>
+  <arg name="visualize"   default="true"/>
+  <arg name="f_d"         default="540."/>
+  <arg name="sqrtEps"     default ="0.2"/>
+  <arg name="B"           default="10"/>
+<!--
+  <group unless="$(arg rosbag)">
+    <node name="openni2" pkg="openni2_camera" type="openni2_camera_node" output="log" />
+  </group>
+-->
+  <group unless="$(arg rosbag)">
+    <include file="$(find openni2_launch)/launch/openni2.launch"/>
+  </group>
+
+  <node name="relay1" pkg="topic_tools" type="relay" args="/rgb/image /camera/rgb/image_raw" />
+  <node name="relay2" pkg="topic_tools" type="relay" args="/depth/image_raw /camera/depth/image_raw" />
+
+  <group if="$(arg silent)">
+    <node name="rosSmoothNormals" pkg="surfNormals" type="rosSmoothNormals" output="log">
+      <param name="visualize" type="bool" value="$(arg visualize)"/>
+      <param name="f_d" type="double" value="$(arg f_d)"/>
+      <param name="sqrtEps" type="double" value="$(arg sqrtEps)"/>
+      <param name="B" type="int" value="$(arg B)"/>
+    </node>
+  </group>
+  <group unless="$(arg silent)">
+    <node name="rosSmoothNormals" pkg="surfNormals" type="rosSmoothNormals" output="screen">
+      <param name="visualize" type="bool" value="false"/>
+      <param name="f_d" type="double" value="$(arg f_d)"/>
+      <param name="sqrtEps" type="double" value="$(arg sqrtEps)"/>
+      <param name="B" type="int" value="$(arg B)"/>
+    </node>
+  </group>
+
+<!--
+    <remap from="/rgb/image" to="/camera/rgb/image_raw"/>
+    <remap from="/depth/image" to="/camera/depth/image_raw"/>
+-->
+
+</launch>
+

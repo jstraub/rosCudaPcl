@@ -1,0 +1,16 @@
+<launch>
+  <node name="openni2" pkg="openni2_camera" type="openni2_camera_node" output="screen" />
+    <node name="relay1" pkg="topic_tools" type="relay" args="/rgb/image /camera/rgb/image_raw" />
+    <node name="relay2" pkg="topic_tools" type="relay" args="/depth/image_raw /camera/depth/image_raw" />
+
+  <node name="rosVisualizer" pkg="surfNormals" type="rosVisualizer" output="screen">
+  </node>
+
+
+<!--
+    <remap from="/rgb/image" to="/camera/rgb/image_raw"/>
+    <remap from="/depth/image" to="/camera/depth/image_raw"/>
+-->
+
+</launch>
+
